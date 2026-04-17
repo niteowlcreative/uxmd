@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+:root {
+  --uxmd-bg:            #0D0D0D;
+  --uxmd-surface:       #161616;
+  --uxmd-surface-2:     #1E1E1E;
+  --uxmd-border:        rgba(255, 255, 255, 0.08);
+  --uxmd-border-strong: rgba(255, 255, 255, 0.15);
+  --uxmd-pink:          #F72585;
+  --uxmd-purple:        #9B5DE5;
+  --uxmd-pink-muted:    rgba(247, 37, 133, 0.15);
+  --uxmd-purple-muted:  rgba(155, 93, 229, 0.15);
+  --uxmd-text:          #F0EEE8;
+  --uxmd-text-muted:    rgba(240, 238, 232, 0.45);
+  --uxmd-text-dim:      rgba(240, 238, 232, 0.25);
+}
+
+@theme inline {
+  --color-uxmd-bg:           var(--uxmd-bg);
+  --color-uxmd-surface:      var(--uxmd-surface);
+  --color-uxmd-surface-2:    var(--uxmd-surface-2);
+  --color-uxmd-pink:         var(--uxmd-pink);
+  --color-uxmd-purple:       var(--uxmd-purple);
+  --color-uxmd-pink-muted:   var(--uxmd-pink-muted);
+  --color-uxmd-purple-muted: var(--uxmd-purple-muted);
+  --color-uxmd-text:         var(--uxmd-text);
+  --color-uxmd-text-muted:   var(--uxmd-text-muted);
+  --color-uxmd-text-dim:     var(--uxmd-text-dim);
+  --font-heading:            var(--font-bebas);
+  --font-body:               var(--font-dm-sans);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--uxmd-bg);
+  color: var(--uxmd-text);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus ring — pink, no transition */
+:focus-visible {
+  outline: 2px solid var(--uxmd-pink);
+  outline-offset: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--uxmd-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--uxmd-border-strong);
+  border-radius: 3px;
+}
