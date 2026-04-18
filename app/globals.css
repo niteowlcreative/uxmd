@@ -57,6 +57,74 @@ body {
   outline-offset: 2px;
 }
 
+/* Questionnaire two-column layout */
+.questionnaire-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.questionnaire-left {
+  flex: 0 0 60%;
+  min-width: 0;
+}
+
+.questionnaire-right {
+  flex: 1 1 auto;
+  min-width: 0;
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .questionnaire-layout {
+    flex-direction: column;
+  }
+  .questionnaire-left,
+  .questionnaire-right {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+  .questionnaire-right {
+    position: static;
+    max-height: 400px;
+  }
+}
+
+/* Entry → questionnaire fade-in */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.entry-state {
+  animation: fadeSlideIn 200ms ease forwards;
+}
+
+.questionnaire-enter {
+  animation: fadeSlideIn 200ms ease forwards;
+}
+
+/* "Generating…" pulse on preview header */
+@keyframes generatingPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.preview-generating {
+  animation: generatingPulse 1.2s ease infinite;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

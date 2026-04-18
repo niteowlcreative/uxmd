@@ -66,9 +66,22 @@ export default function Home() {
                 color: "var(--uxmd-text-muted)",
               }}
             >
-              Design context for the AI age
+              Using AI to build context for AI - a UX designer tool
             </p>
           </div>
+
+          {/* Full-width accent bar between tagline and tab nav */}
+          <div
+            aria-hidden
+            style={{
+              height: "2px",
+              width: "100%",
+              background:
+                "linear-gradient(to right, #F72585, #9B5DE5)",
+              borderRadius: "1px",
+              marginBottom: "0",
+            }}
+          />
 
           {/* Tab navigation */}
           <TabNav activeTab={activeTab} onChange={setActiveTab} />

@@ -1,8 +1,21 @@
 "use client";
 
+import { useState } from "react";
+import Questionnaire from "./questionnaire/Questionnaire";
+
 export default function BuildTab() {
+  const [started, setStarted] = useState(false);
+
+  if (started) {
+    return (
+      <div className="questionnaire-enter">
+        <Questionnaire onReset={() => setStarted(false)} />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center flex-1 gap-6 px-8 py-24">
+    <div className="entry-state flex flex-col items-center justify-center flex-1 gap-6 px-8 py-24">
       <div className="text-center max-w-lg">
         <p
           style={{
@@ -26,13 +39,77 @@ export default function BuildTab() {
           language, component conventions, and design intent.
         </p>
 
+        {/* Three-step explainer */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: "0",
+            marginBottom: "32px",
+            flexWrap: "wrap",
+          }}
+        >
+          {[
+            { num: "01", text: "Answer 7 questions about your project" },
+            {
+              num: "02",
+              text: "Your DESIGN.md is generated live as you go",
+            },
+            {
+              num: "03",
+              text: "Download one file. Drop it in your project folder.",
+            },
+          ].map((step, i, arr) => (
+            <div
+              key={step.num}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "4px",
+                padding: "0 24px",
+                borderRight:
+                  i < arr.length - 1
+                    ? "0.5px solid rgba(255,255,255,0.1)"
+                    : "none",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--font-bebas)",
+                  fontSize: "11px",
+                  letterSpacing: "0.06em",
+                  color: "var(--uxmd-pink)",
+                }}
+              >
+                {step.num}
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--font-dm-sans)",
+                  fontSize: "13px",
+                  color: "var(--uxmd-text-muted)",
+                  maxWidth: "160px",
+                  textAlign: "center",
+                  lineHeight: 1.4,
+                }}
+              >
+                {step.text}
+              </span>
+            </div>
+          ))}
+        </div>
+
         <button
+          onClick={() => setStarted(true)}
           style={{
             background: "var(--uxmd-pink)",
             color: "#ffffff",
             border: "none",
+            boxShadow: "none",
             padding: "9px 20px",
-            borderRadius: "6px",
+            borderRadius: "0.5rem",
             fontFamily: "var(--font-bebas)",
             fontSize: "16px",
             letterSpacing: "0.06em",
@@ -43,7 +120,9 @@ export default function BuildTab() {
           onMouseEnter={(e) =>
             (e.currentTarget.style.filter = "brightness(1.1)")
           }
-          onMouseLeave={(e) => (e.currentTarget.style.filter = "brightness(1)")}
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.filter = "brightness(1)")
+          }
           onMouseDown={(e) =>
             (e.currentTarget.style.transform = "scale(0.98)")
           }
