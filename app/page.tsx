@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 import type { Tab } from "@/app/types";
 import { createClient } from "@/lib/supabase/client";
@@ -30,6 +31,44 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
+  // Auth indicator shown flush-right in the tab nav row
+  const authSlot = user ? (
+    <UserMenu user={user} />
+  ) : (
+    <Link
+      href="/login"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        background: "transparent",
+        color: "var(--uxmd-text-muted)",
+        border: "0.5px solid var(--uxmd-border-strong)",
+        padding: "6px 14px",
+        borderRadius: "0.5rem",
+        fontFamily: "var(--font-bebas)",
+        fontSize: "14px",
+        letterSpacing: "0.06em",
+        textTransform: "uppercase",
+        textDecoration: "none",
+        cursor: "pointer",
+        transition: "all 150ms ease",
+        whiteSpace: "nowrap",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLAnchorElement).style.background =
+          "var(--uxmd-surface-2)";
+        (e.currentTarget as HTMLAnchorElement).style.color = "var(--uxmd-text)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+        (e.currentTarget as HTMLAnchorElement).style.color =
+          "var(--uxmd-text-muted)";
+      }}
+    >
+      Sign In
+    </Link>
+  );
+
   return (
     <div
       style={{
@@ -47,60 +86,52 @@ export default function Home() {
             margin: "0 auto",
           }}
         >
-          {/* Wordmark row — flex so UserMenu can sit top-right */}
+          {/* Wordmark row */}
           <div
             style={{
               paddingTop: "24px",
               paddingBottom: "16px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
             }}
           >
-            <div>
-              <h1
-                aria-label="UXMD"
-                style={{
-                  fontFamily: "var(--font-bebas)",
-                  fontSize: "32px",
-                  letterSpacing: "0.04em",
-                  textTransform: "uppercase",
-                  lineHeight: 1,
-                  userSelect: "none",
-                  marginBottom: "2px",
-                }}
-              >
-                <span style={{ color: "var(--uxmd-text)" }}>UX</span>
-                <span style={{ color: "var(--uxmd-pink)" }}>M</span>
-                <span style={{ color: "var(--uxmd-purple)" }}>D</span>
-              </h1>
-              {/* Decorative accent bar — pink → purple, spec: 2px only under wordmark */}
-              <div
-                aria-hidden
-                style={{
-                  height: "2px",
-                  width: "72px",
-                  background:
-                    "linear-gradient(to right, var(--uxmd-pink), var(--uxmd-purple))",
-                  borderRadius: "1px",
-                  marginBottom: "6px",
-                }}
-              />
-              <p
-                style={{
-                  fontFamily: "var(--font-dm-sans)",
-                  fontSize: "12px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                  color: "var(--uxmd-text-muted)",
-                }}
-              >
-                Using AI to build context for AI - a UX designer tool
-              </p>
-            </div>
-
-            {/* User menu — shown when signed in */}
-            {user && <UserMenu user={user} />}
+            <h1
+              aria-label="UXMD"
+              style={{
+                fontFamily: "var(--font-bebas)",
+                fontSize: "32px",
+                letterSpacing: "0.04em",
+                textTransform: "uppercase",
+                lineHeight: 1,
+                userSelect: "none",
+                marginBottom: "2px",
+              }}
+            >
+              <span style={{ color: "var(--uxmd-text)" }}>UX</span>
+              <span style={{ color: "var(--uxmd-pink)" }}>M</span>
+              <span style={{ color: "var(--uxmd-purple)" }}>D</span>
+            </h1>
+            {/* Decorative accent bar — pink → purple, spec: 2px only under wordmark */}
+            <div
+              aria-hidden
+              style={{
+                height: "2px",
+                width: "72px",
+                background:
+                  "linear-gradient(to right, var(--uxmd-pink), var(--uxmd-purple))",
+                borderRadius: "1px",
+                marginBottom: "6px",
+              }}
+            />
+            <p
+              style={{
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: "12px",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                color: "var(--uxmd-text-muted)",
+              }}
+            >
+              Using AI to build context for AI - a UX designer tool
+            </p>
           </div>
 
           {/* Full-width accent bar between tagline and tab nav */}
@@ -115,8 +146,12 @@ export default function Home() {
             }}
           />
 
-          {/* Tab navigation */}
-          <TabNav activeTab={activeTab} onChange={setActiveTab} />
+          {/* Tab navigation with auth indicator flush right */}
+          <TabNav
+            activeTab={activeTab}
+            onChange={setActiveTab}
+            rightSlot={authSlot}
+          />
         </div>
       </header>
 

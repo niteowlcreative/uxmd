@@ -18,7 +18,7 @@ export default function LoginPage() {
     setError("");
 
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error: authError } = await supabase.auth.signInWithOtp({
       email: email.trim(),
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
@@ -27,8 +27,8 @@ export default function LoginPage() {
 
     setLoading(false);
 
-    if (error) {
-      setError("Couldn't send the magic link. Check the email address and try again.");
+    if (authError) {
+      setError("Something went wrong. Check the email address and try again.");
       return;
     }
 
@@ -53,21 +53,22 @@ export default function LoginPage() {
           borderRadius: "10px",
           padding: "40px",
           width: "100%",
-          maxWidth: "420px",
+          maxWidth: "440px",
         }}
       >
-        {/* Wordmark */}
-        <div style={{ marginBottom: "32px" }}>
+        {/* Wordmark — centred */}
+        <div style={{ textAlign: "center", marginBottom: "28px" }}>
           <h1
             aria-label="UXMD"
             style={{
               fontFamily: "var(--font-bebas)",
-              fontSize: "32px",
+              fontSize: "36px",
               letterSpacing: "0.04em",
               textTransform: "uppercase",
               lineHeight: 1,
               userSelect: "none",
-              marginBottom: "2px",
+              marginBottom: "6px",
+              display: "inline-block",
             }}
           >
             <span style={{ color: "var(--uxmd-text)" }}>UX</span>
@@ -78,15 +79,18 @@ export default function LoginPage() {
             aria-hidden
             style={{
               height: "2px",
-              width: "72px",
-              background: "linear-gradient(to right, var(--uxmd-pink), var(--uxmd-purple))",
+              width: "56px",
+              background:
+                "linear-gradient(to right, var(--uxmd-pink), var(--uxmd-purple))",
               borderRadius: "1px",
+              margin: "0 auto",
             }}
           />
         </div>
 
         {!submitted ? (
           <>
+            {/* Heading */}
             <h2
               style={{
                 fontFamily: "var(--font-bebas)",
@@ -94,12 +98,15 @@ export default function LoginPage() {
                 letterSpacing: "0.03em",
                 textTransform: "uppercase",
                 color: "var(--uxmd-text)",
-                marginBottom: "8px",
+                marginBottom: "10px",
                 lineHeight: 1.1,
+                textAlign: "center",
               }}
             >
               Sign in or create an account
             </h2>
+
+            {/* Subtext */}
             <p
               style={{
                 fontFamily: "var(--font-dm-sans)",
@@ -107,14 +114,16 @@ export default function LoginPage() {
                 color: "var(--uxmd-text-muted)",
                 marginBottom: "24px",
                 lineHeight: 1.5,
+                textAlign: "center",
               }}
             >
-              Enter your email and we&rsquo;ll send you a magic link. No
-              password needed.
+              Enter your email and we&rsquo;ll send you a magic link.
+              <br />
+              No password needed.
             </p>
 
             <form onSubmit={handleSubmit}>
-              <div style={{ marginBottom: "16px" }}>
+              <div style={{ marginBottom: error ? "8px" : "16px" }}>
                 <label
                   htmlFor="email"
                   style={{
@@ -128,14 +137,14 @@ export default function LoginPage() {
                     marginBottom: "8px",
                   }}
                 >
-                  Email address
+                  Email
                 </label>
                 <input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder="your@email.com"
                   required
                   style={{
                     width: "100%",
@@ -147,6 +156,7 @@ export default function LoginPage() {
                     fontFamily: "var(--font-dm-sans)",
                     fontSize: "14px",
                     outline: "none",
+                    boxSizing: "border-box",
                   }}
                   onFocus={(e) =>
                     (e.currentTarget.style.boxShadow =
@@ -158,11 +168,12 @@ export default function LoginPage() {
                 />
               </div>
 
+              {/* Inline error */}
               {error && (
                 <p
                   style={{
                     fontFamily: "var(--font-dm-sans)",
-                    fontSize: "13px",
+                    fontSize: "12px",
                     color: "var(--uxmd-pink)",
                     marginBottom: "12px",
                     lineHeight: 1.4,
@@ -172,16 +183,19 @@ export default function LoginPage() {
                 </p>
               )}
 
+              {/* Submit */}
               <button
                 type="submit"
                 disabled={loading}
                 style={{
                   width: "100%",
-                  background: loading ? "rgba(247,37,133,0.5)" : "var(--uxmd-pink)",
+                  background: loading
+                    ? "rgba(247,37,133,0.5)"
+                    : "var(--uxmd-pink)",
                   color: "#ffffff",
                   border: "none",
                   boxShadow: "none",
-                  padding: "9px 20px",
+                  padding: "10px 20px",
                   borderRadius: "0.5rem",
                   fontFamily: "var(--font-bebas)",
                   fontSize: "16px",
@@ -198,26 +212,36 @@ export default function LoginPage() {
                   (e.currentTarget.style.filter = "brightness(1)")
                 }
               >
-                {loading ? "Sending…" : "Send magic link"}
+                {loading ? "Sending…" : "Send Magic Link"}
               </button>
             </form>
 
+            {/* Divider */}
+            <div
+              aria-hidden
+              style={{
+                height: "0.5px",
+                background: "rgba(255,255,255,0.08)",
+                margin: "24px 0",
+              }}
+            />
+
+            {/* Guest link */}
             <p
               style={{
                 fontFamily: "var(--font-dm-sans)",
                 fontSize: "13px",
                 color: "var(--uxmd-text-muted)",
-                marginTop: "20px",
                 textAlign: "center",
+                margin: 0,
               }}
             >
               Just browsing?{" "}
               <Link
                 href="/"
                 style={{
-                  color: "var(--uxmd-text-muted)",
-                  textDecoration: "underline",
-                  textUnderlineOffset: "3px",
+                  color: "var(--uxmd-purple)",
+                  textDecoration: "none",
                 }}
               >
                 Continue without an account
@@ -225,46 +249,99 @@ export default function LoginPage() {
             </p>
           </>
         ) : (
-          /* Success state */
+          /* ── Success state ── */
           <>
+            {/* Checkmark icon */}
+            <div
+              style={{ textAlign: "center", marginBottom: "16px" }}
+            >
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden
+              >
+                <circle
+                  cx="16"
+                  cy="16"
+                  r="14.75"
+                  stroke="#F72585"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M10 16.5L14.5 21L22 12"
+                  stroke="#F72585"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+
+            {/* Heading */}
             <h2
               style={{
                 fontFamily: "var(--font-bebas)",
-                fontSize: "28px",
+                fontSize: "24px",
                 letterSpacing: "0.03em",
                 textTransform: "uppercase",
                 color: "var(--uxmd-text)",
-                marginBottom: "12px",
+                marginBottom: "10px",
                 lineHeight: 1.1,
+                textAlign: "center",
               }}
             >
               Check your email
             </h2>
+
+            {/* Body */}
             <p
-              style={{
-                fontFamily: "var(--font-dm-sans)",
-                fontSize: "14px",
-                color: "var(--uxmd-text-muted)",
-                lineHeight: 1.6,
-                marginBottom: "24px",
-              }}
-            >
-              We sent a magic link to{" "}
-              <span style={{ color: "var(--uxmd-text)" }}>{email}</span>.
-              Click it to sign in — it expires in 10 minutes.
-            </p>
-            <Link
-              href="/"
               style={{
                 fontFamily: "var(--font-dm-sans)",
                 fontSize: "13px",
                 color: "var(--uxmd-text-muted)",
-                textDecoration: "underline",
-                textUnderlineOffset: "3px",
+                lineHeight: 1.6,
+                marginBottom: "24px",
+                textAlign: "center",
               }}
             >
-              ← Back to home
-            </Link>
+              We sent a magic link to{" "}
+              <span style={{ color: "var(--uxmd-text)" }}>{email}</span>.
+              <br />
+              Click it to sign in — it expires in 10 minutes.
+            </p>
+
+            {/* Send Again — ghost button, resets to form */}
+            <button
+              type="button"
+              onClick={() => setSubmitted(false)}
+              style={{
+                width: "100%",
+                background: "transparent",
+                color: "var(--uxmd-text-muted)",
+                border: "0.5px solid var(--uxmd-border-strong)",
+                padding: "10px 20px",
+                borderRadius: "0.5rem",
+                fontFamily: "var(--font-bebas)",
+                fontSize: "16px",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                cursor: "pointer",
+                transition: "all 150ms ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "var(--uxmd-surface-2)";
+                e.currentTarget.style.color = "var(--uxmd-text)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.color = "var(--uxmd-text-muted)";
+              }}
+            >
+              Send Again
+            </button>
           </>
         )}
       </div>

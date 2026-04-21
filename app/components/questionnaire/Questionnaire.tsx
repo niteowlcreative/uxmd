@@ -41,7 +41,11 @@ export default function Questionnaire({
   const [isTyping, setIsTyping] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
+  const [downloadDone, setDownloadDone] = useState(false);
+  const [showNudge, setShowNudge] = useState(false);
+  const [nudgeDismissed, setNudgeDismissed] = useState(false);
   const typingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const nudgeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const onChange = useCallback(
     (field: keyof FormData, value: string | boolean | null) => {
@@ -58,6 +62,7 @@ export default function Questionnaire({
   useEffect(() => {
     return () => {
       if (typingTimer.current) clearTimeout(typingTimer.current);
+      if (nudgeTimer.current) clearTimeout(nudgeTimer.current);
     };
   }, []);
 
@@ -95,6 +100,10 @@ export default function Questionnaire({
     a.download = "DESIGN.md";
     a.click();
     URL.revokeObjectURL(url);
+    // Step B: show success confirmation
+    setDownloadDone(true);
+    // Step C: animate in the nudge panel after 1 second
+    nudgeTimer.current = setTimeout(() => setShowNudge(true), 1000);
   }, [formData]);
 
   const handleSave = useCallback(async () => {
@@ -466,8 +475,8 @@ export default function Questionnaire({
                   </div>
                 )}
 
-                {/* Download + Start Over row */}
-                <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                {/* Download button OR success confirmation */}
+                {!downloadDone ? (
                   <button
                     type="button"
                     onClick={handleDownload}
@@ -500,6 +509,277 @@ export default function Questionnaire({
                   >
                     Download DESIGN.MD
                   </button>
+                ) : (
+                  <div
+                    style={{
+                      borderLeft: "2px solid #F72585",
+                      background: "rgba(247,37,133,0.06)",
+                      borderRadius: "0 4px 4px 0",
+                      padding: "8px 12px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    {/* Checkmark icon */}
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden
+                      style={{ flexShrink: 0 }}
+                    >
+                      <path
+                        d="M3 8.5L6.5 12L13 5"
+                        stroke="#F72585"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span
+                      style={{
+                        fontFamily: "var(--font-dm-sans)",
+                        fontSize: "13px",
+                        color: "var(--uxmd-text)",
+                      }}
+                    >
+                      DESIGN.md downloaded successfully.
+                    </span>
+                  </div>
+                )}
+
+                {/* Nudge panel — fades in 1 second after download */}
+                {showNudge && !nudgeDismissed && (
+                  <div
+                    className="nudge-appear"
+                    style={{
+                      background: "var(--uxmd-surface)",
+                      border: "0.5px solid var(--uxmd-border)",
+                      borderRadius: "10px",
+                      padding: "24px",
+                    }}
+                  >
+                    {isLoggedIn ? (
+                      /* Logged-in nudge */
+                      <>
+                        <h3
+                          style={{
+                            fontFamily: "var(--font-bebas)",
+                            fontSize: "20px",
+                            letterSpacing: "0.03em",
+                            textTransform: "uppercase",
+                            color: "var(--uxmd-text)",
+                            marginBottom: "8px",
+                            lineHeight: 1.1,
+                          }}
+                        >
+                          Save this to your projects?
+                        </h3>
+                        <p
+                          style={{
+                            fontFamily: "var(--font-dm-sans)",
+                            fontSize: "13px",
+                            color: "var(--uxmd-text-muted)",
+                            marginBottom: "16px",
+                            lineHeight: 1.5,
+                          }}
+                        >
+                          Save it now and come back to edit or re-download any
+                          time. Saved projects are kept for 90 days.
+                        </p>
+                        {saveStatus === "saved" ? (
+                          <p
+                            style={{
+                              fontFamily: "var(--font-dm-sans)",
+                              fontSize: "13px",
+                              color: "var(--uxmd-text-muted)",
+                            }}
+                          >
+                            Saved.{" "}
+                            <Link
+                              href="/dashboard"
+                              style={{
+                                color: "var(--uxmd-purple)",
+                                textDecoration: "underline",
+                                textUnderlineOffset: "3px",
+                              }}
+                            >
+                              View it in your dashboard →
+                            </Link>
+                          </p>
+                        ) : (
+                          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                            <button
+                              type="button"
+                              onClick={handleSave}
+                              disabled={saveStatus === "saving"}
+                              style={{
+                                background: saveStatus === "saving"
+                                  ? "rgba(247,37,133,0.5)"
+                                  : "var(--uxmd-pink)",
+                                color: "#ffffff",
+                                border: "none",
+                                boxShadow: "none",
+                                padding: "8px 20px",
+                                borderRadius: "0.5rem",
+                                fontFamily: "var(--font-bebas)",
+                                fontSize: "15px",
+                                letterSpacing: "0.06em",
+                                textTransform: "uppercase",
+                                cursor: saveStatus === "saving" ? "not-allowed" : "pointer",
+                                transition: "filter 150ms ease",
+                              }}
+                              onMouseEnter={(e) => {
+                                if (saveStatus === "idle")
+                                  e.currentTarget.style.filter = "brightness(1.1)";
+                              }}
+                              onMouseLeave={(e) =>
+                                (e.currentTarget.style.filter = "brightness(1)")
+                              }
+                            >
+                              {saveStatus === "saving" ? "Saving…" : "Save Project"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setNudgeDismissed(true)}
+                              style={{
+                                background: "transparent",
+                                color: "var(--uxmd-text-muted)",
+                                border: "0.5px solid var(--uxmd-border-strong)",
+                                padding: "7px 20px",
+                                borderRadius: "0.5rem",
+                                fontFamily: "var(--font-bebas)",
+                                fontSize: "15px",
+                                letterSpacing: "0.06em",
+                                textTransform: "uppercase",
+                                cursor: "pointer",
+                                transition: "all 150ms ease",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background = "var(--uxmd-surface-2)";
+                                e.currentTarget.style.color = "var(--uxmd-text)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = "transparent";
+                                e.currentTarget.style.color = "var(--uxmd-text-muted)";
+                              }}
+                            >
+                              No Thanks
+                            </button>
+                            {saveStatus === "error" && (
+                              <span
+                                style={{
+                                  fontFamily: "var(--font-dm-sans)",
+                                  fontSize: "12px",
+                                  color: "var(--uxmd-pink)",
+                                  alignSelf: "center",
+                                }}
+                              >
+                                Couldn&rsquo;t save right now.
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      /* Guest nudge */
+                      <>
+                        <h3
+                          style={{
+                            fontFamily: "var(--font-bebas)",
+                            fontSize: "20px",
+                            letterSpacing: "0.03em",
+                            textTransform: "uppercase",
+                            color: "var(--uxmd-text)",
+                            marginBottom: "8px",
+                            lineHeight: 1.1,
+                          }}
+                        >
+                          Want to save this project?
+                        </h3>
+                        <p
+                          style={{
+                            fontFamily: "var(--font-dm-sans)",
+                            fontSize: "13px",
+                            color: "var(--uxmd-text-muted)",
+                            marginBottom: "16px",
+                            lineHeight: 1.5,
+                          }}
+                        >
+                          Create a free account to save your DESIGN.md, come
+                          back to edit it any time, and re-download whenever you
+                          need it. Projects are saved for 90 days.
+                        </p>
+                        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                          <Link
+                            href="/login"
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              background: "var(--uxmd-pink)",
+                              color: "#ffffff",
+                              border: "none",
+                              padding: "8px 20px",
+                              borderRadius: "0.5rem",
+                              fontFamily: "var(--font-bebas)",
+                              fontSize: "15px",
+                              letterSpacing: "0.06em",
+                              textTransform: "uppercase",
+                              textDecoration: "none",
+                              cursor: "pointer",
+                              transition: "filter 150ms ease",
+                            }}
+                            onMouseEnter={(e) =>
+                              ((e.currentTarget as HTMLAnchorElement).style.filter =
+                                "brightness(1.1)")
+                            }
+                            onMouseLeave={(e) =>
+                              ((e.currentTarget as HTMLAnchorElement).style.filter =
+                                "brightness(1)")
+                            }
+                          >
+                            Create Free Account
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => setNudgeDismissed(true)}
+                            style={{
+                              background: "transparent",
+                              color: "var(--uxmd-text-muted)",
+                              border: "0.5px solid var(--uxmd-border-strong)",
+                              padding: "7px 20px",
+                              borderRadius: "0.5rem",
+                              fontFamily: "var(--font-bebas)",
+                              fontSize: "15px",
+                              letterSpacing: "0.06em",
+                              textTransform: "uppercase",
+                              cursor: "pointer",
+                              transition: "all 150ms ease",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background =
+                                "var(--uxmd-surface-2)";
+                              e.currentTarget.style.color = "var(--uxmd-text)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = "transparent";
+                              e.currentTarget.style.color =
+                                "var(--uxmd-text-muted)";
+                            }}
+                          >
+                            No Thanks
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {/* Start Over / Back to Dashboard */}
+                <div>
                   <button
                     type="button"
                     onClick={onReset}
@@ -529,30 +809,6 @@ export default function Questionnaire({
                     {isEditMode ? "Back to Dashboard" : "Start Over"}
                   </button>
                 </div>
-
-                {/* Guest upsell */}
-                {!isLoggedIn && (
-                  <p
-                    style={{
-                      fontFamily: "var(--font-dm-sans)",
-                      fontSize: "13px",
-                      color: "var(--uxmd-text-muted)",
-                      marginTop: "4px",
-                    }}
-                  >
-                    Want to save this and come back to it?{" "}
-                    <Link
-                      href="/login"
-                      style={{
-                        color: "var(--uxmd-purple)",
-                        textDecoration: "underline",
-                        textUnderlineOffset: "3px",
-                      }}
-                    >
-                      Create a free account
-                    </Link>
-                  </p>
-                )}
               </div>
             </div>
           )}

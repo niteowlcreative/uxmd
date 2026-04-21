@@ -134,6 +134,22 @@ body {
   }
 }
 
+/* Post-download nudge fade-in */
+@keyframes nudgeAppear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nudge-appear {
+  animation: nudgeAppear 300ms ease forwards;
+}
+
 /* "Generating…" pulse on preview header */
 @keyframes generatingPulse {
   0%, 100% { opacity: 1; }

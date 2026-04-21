@@ -24,7 +24,6 @@ export default function UserMenu({ user }: UserMenuProps) {
         display: "flex",
         alignItems: "center",
         gap: "12px",
-        paddingTop: "4px",
       }}
     >
       <span
@@ -39,25 +38,29 @@ export default function UserMenu({ user }: UserMenuProps) {
       <button
         onClick={handleSignOut}
         style={{
-          background: "none",
-          border: "none",
-          fontFamily: "var(--font-dm-sans)",
-          fontSize: "12px",
-          color: "var(--uxmd-text-dim)",
+          background: "transparent",
+          color: "var(--uxmd-text-muted)",
+          border: "0.5px solid var(--uxmd-border-strong)",
+          padding: "6px 14px",
+          borderRadius: "0.5rem",
+          fontFamily: "var(--font-bebas)",
+          fontSize: "14px",
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
           cursor: "pointer",
-          padding: "0",
-          textDecoration: "underline",
-          textUnderlineOffset: "3px",
-          transition: "color 150ms ease",
+          transition: "all 150ms ease",
+          whiteSpace: "nowrap",
         }}
-        onMouseEnter={(e) =>
-          (e.currentTarget.style.color = "var(--uxmd-text-muted)")
-        }
-        onMouseLeave={(e) =>
-          (e.currentTarget.style.color = "var(--uxmd-text-dim)")
-        }
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = "var(--uxmd-surface-2)";
+          e.currentTarget.style.color = "var(--uxmd-text)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = "transparent";
+          e.currentTarget.style.color = "var(--uxmd-text-muted)";
+        }}
       >
-        Sign out
+        Sign Out
       </button>
     </div>
   );
