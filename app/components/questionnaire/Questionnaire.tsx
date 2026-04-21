@@ -1,25 +1,46 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import Link from "next/link";
 import type { FormData } from "./types";
 import { initialFormData } from "./types";
 import { generateDesignMd } from "./generateDesignMd";
+import { createClient } from "@/lib/supabase/client";
 import ProgressDots from "./ProgressDots";
 import StepFields, { STEP_META } from "./StepFields";
 import LivePreview from "./LivePreview";
 
 const TOTAL_STEPS = 7;
 
+type SaveStatus = "idle" | "saving" | "saved" | "error";
+
 interface QuestionnaireProps {
   onReset: () => void;
+  // Auth / save props — all optional so existing BuildTab usage is unchanged
+  isLoggedIn?: boolean;
+  userId?: string;
+  projectId?: string; // present when editing an existing project
+  initialData?: Partial<FormData>; // pre-populate fields in edit mode
+  editProjectName?: string; // shows "EDITING: [name]" above questionnaire
 }
 
-export default function Questionnaire({ onReset }: QuestionnaireProps) {
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+export default function Questionnaire({
+  onReset,
+  isLoggedIn = false,
+  userId,
+  projectId,
+  initialData,
+  editProjectName,
+}: QuestionnaireProps) {
+  const [formData, setFormData] = useState<FormData>({
+    ...initialFormData,
+    ...initialData,
+  });
   const [currentStep, setCurrentStep] = useState(1);
   const [isComplete, setIsComplete] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [nameError, setNameError] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
   const typingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const onChange = useCallback(
@@ -76,7 +97,38 @@ export default function Questionnaire({ onReset }: QuestionnaireProps) {
     URL.revokeObjectURL(url);
   }, [formData]);
 
+  const handleSave = useCallback(async () => {
+    setSaveStatus("saving");
+    const supabase = createClient();
+    const content = generateDesignMd(formData);
+
+    if (projectId) {
+      // Edit mode — update existing row
+      const { error } = await supabase
+        .from("projects")
+        .update({
+          design_md: content,
+          answers: formData as unknown as Record<string, unknown>,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", projectId);
+
+      setSaveStatus(error ? "error" : "saved");
+    } else {
+      // New project — insert
+      const { error } = await supabase.from("projects").insert({
+        user_id: userId,
+        project_name: formData.projectName || "Untitled",
+        design_md: content,
+        answers: formData as unknown as Record<string, unknown>,
+      });
+
+      setSaveStatus(error ? "error" : "saved");
+    }
+  }, [formData, projectId, userId]);
+
   const stepMeta = STEP_META[currentStep - 1];
+  const isEditMode = !!projectId;
 
   return (
     <div
@@ -207,7 +259,8 @@ export default function Questionnaire({ onReset }: QuestionnaireProps) {
                       transition: "all 150ms ease",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "var(--uxmd-surface-2)";
+                      e.currentTarget.style.background =
+                        "var(--uxmd-surface-2)";
                       e.currentTarget.style.color = "var(--uxmd-text)";
                     }}
                     onMouseLeave={(e) => {
@@ -280,7 +333,7 @@ export default function Questionnaire({ onReset }: QuestionnaireProps) {
               </div>
             </>
           ) : (
-            /* Completion state */
+            /* ── Completion state ── */
             <div style={{ paddingTop: "40px" }}>
               <h2
                 style={{
@@ -308,66 +361,198 @@ export default function Questionnaire({ onReset }: QuestionnaireProps) {
                 Drop this file into your project folder and paste it into your
                 Claude Code, Cursor, or Codex session before you build.
               </p>
-              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                <button
-                  type="button"
-                  onClick={handleDownload}
-                  style={{
-                    background: "var(--uxmd-pink)",
-                    color: "#ffffff",
-                    border: "none",
-                    boxShadow: "none",
-                    padding: "9px 24px",
-                    borderRadius: "0.5rem",
-                    fontFamily: "var(--font-bebas)",
-                    fontSize: "16px",
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    cursor: "pointer",
-                    transition: "filter 150ms ease",
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.filter = "brightness(1.1)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.filter = "brightness(1)")
-                  }
-                  onMouseDown={(e) =>
-                    (e.currentTarget.style.transform = "scale(0.98)")
-                  }
-                  onMouseUp={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  Download DESIGN.MD
-                </button>
-                <button
-                  type="button"
-                  onClick={onReset}
-                  style={{
-                    background: "transparent",
-                    color: "var(--uxmd-text-muted)",
-                    border: "0.5px solid var(--uxmd-border-strong)",
-                    padding: "8px 20px",
-                    borderRadius: "0.5rem",
-                    fontFamily: "var(--font-bebas)",
-                    fontSize: "16px",
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    cursor: "pointer",
-                    transition: "all 150ms ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--uxmd-surface-2)";
-                    e.currentTarget.style.color = "var(--uxmd-text)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
-                    e.currentTarget.style.color = "var(--uxmd-text-muted)";
-                  }}
-                >
-                  Start Over
-                </button>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                  alignItems: "flex-start",
+                }}
+              >
+                {/* Logged-in: Save CTA (above download, per spec) */}
+                {isLoggedIn && (
+                  <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+                    <button
+                      type="button"
+                      onClick={handleSave}
+                      disabled={saveStatus === "saving" || saveStatus === "saved"}
+                      style={{
+                        background: "transparent",
+                        color:
+                          saveStatus === "saved"
+                            ? "var(--uxmd-purple)"
+                            : "var(--uxmd-purple)",
+                        border:
+                          saveStatus === "saved"
+                            ? "1px solid var(--uxmd-purple)"
+                            : "1px solid var(--uxmd-purple)",
+                        padding: "8px 20px",
+                        borderRadius: "0.5rem",
+                        fontFamily: "var(--font-bebas)",
+                        fontSize: "16px",
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                        cursor:
+                          saveStatus === "saving" || saveStatus === "saved"
+                            ? "default"
+                            : "pointer",
+                        opacity:
+                          saveStatus === "saving" || saveStatus === "saved"
+                            ? 0.7
+                            : 1,
+                        transition: "all 150ms ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (saveStatus === "idle")
+                          e.currentTarget.style.background =
+                            "var(--uxmd-purple-muted)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "transparent";
+                      }}
+                    >
+                      {saveStatus === "saving"
+                        ? "Saving…"
+                        : saveStatus === "saved"
+                        ? isEditMode
+                          ? "Changes saved"
+                          : "Saved"
+                        : isEditMode
+                        ? "Save changes"
+                        : "Save to my projects"}
+                    </button>
+
+                    {/* Inline feedback */}
+                    {saveStatus === "saved" && (
+                      <span
+                        style={{
+                          fontFamily: "var(--font-dm-sans)",
+                          fontSize: "13px",
+                          color: "var(--uxmd-text-muted)",
+                        }}
+                      >
+                        {isEditMode ? (
+                          "Updated."
+                        ) : (
+                          <>
+                            Saved.{" "}
+                            <Link
+                              href="/dashboard"
+                              style={{
+                                color: "var(--uxmd-purple)",
+                                textDecoration: "underline",
+                                textUnderlineOffset: "3px",
+                              }}
+                            >
+                              View in your dashboard.
+                            </Link>
+                          </>
+                        )}
+                      </span>
+                    )}
+                    {saveStatus === "error" && (
+                      <span
+                        style={{
+                          fontFamily: "var(--font-dm-sans)",
+                          fontSize: "13px",
+                          color: "var(--uxmd-pink)",
+                        }}
+                      >
+                        Couldn&rsquo;t save right now. Download the file to
+                        keep a copy.
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {/* Download + Start Over row */}
+                <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    onClick={handleDownload}
+                    style={{
+                      background: "var(--uxmd-pink)",
+                      color: "#ffffff",
+                      border: "none",
+                      boxShadow: "none",
+                      padding: "9px 24px",
+                      borderRadius: "0.5rem",
+                      fontFamily: "var(--font-bebas)",
+                      fontSize: "16px",
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      cursor: "pointer",
+                      transition: "filter 150ms ease",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.filter = "brightness(1.1)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.filter = "brightness(1)")
+                    }
+                    onMouseDown={(e) =>
+                      (e.currentTarget.style.transform = "scale(0.98)")
+                    }
+                    onMouseUp={(e) =>
+                      (e.currentTarget.style.transform = "scale(1)")
+                    }
+                  >
+                    Download DESIGN.MD
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onReset}
+                    style={{
+                      background: "transparent",
+                      color: "var(--uxmd-text-muted)",
+                      border: "0.5px solid var(--uxmd-border-strong)",
+                      padding: "8px 20px",
+                      borderRadius: "0.5rem",
+                      fontFamily: "var(--font-bebas)",
+                      fontSize: "16px",
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      cursor: "pointer",
+                      transition: "all 150ms ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background =
+                        "var(--uxmd-surface-2)";
+                      e.currentTarget.style.color = "var(--uxmd-text)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.style.color = "var(--uxmd-text-muted)";
+                    }}
+                  >
+                    {isEditMode ? "Back to Dashboard" : "Start Over"}
+                  </button>
+                </div>
+
+                {/* Guest upsell */}
+                {!isLoggedIn && (
+                  <p
+                    style={{
+                      fontFamily: "var(--font-dm-sans)",
+                      fontSize: "13px",
+                      color: "var(--uxmd-text-muted)",
+                      marginTop: "4px",
+                    }}
+                  >
+                    Want to save this and come back to it?{" "}
+                    <Link
+                      href="/login"
+                      style={{
+                        color: "var(--uxmd-purple)",
+                        textDecoration: "underline",
+                        textUnderlineOffset: "3px",
+                      }}
+                    >
+                      Create a free account
+                    </Link>
+                  </p>
+                )}
               </div>
             </div>
           )}

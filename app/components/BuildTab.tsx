@@ -1,15 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import type { User } from "@supabase/supabase-js";
 import Questionnaire from "./questionnaire/Questionnaire";
 
-export default function BuildTab() {
+interface BuildTabProps {
+  user: User | null;
+}
+
+export default function BuildTab({ user }: BuildTabProps) {
   const [started, setStarted] = useState(false);
 
   if (started) {
     return (
       <div className="questionnaire-enter">
-        <Questionnaire onReset={() => setStarted(false)} />
+        <Questionnaire
+          onReset={() => setStarted(false)}
+          isLoggedIn={!!user}
+          userId={user?.id}
+        />
       </div>
     );
   }
@@ -141,16 +150,22 @@ export default function BuildTab() {
           }}
         >
           No account needed.{" "}
-          <span
-            style={{
-              color: "var(--uxmd-text-dim)",
-              textDecoration: "line-through",
-              cursor: "not-allowed",
-            }}
-            title="Available in Phase 2"
-          >
-            Create an account to save your history.
-          </span>
+          {user ? (
+            <span style={{ color: "var(--uxmd-text-dim)" }}>
+              Signed in as {user.email}.
+            </span>
+          ) : (
+            <span
+              style={{
+                color: "var(--uxmd-text-dim)",
+                textDecoration: "line-through",
+                cursor: "not-allowed",
+              }}
+              title="Available in Phase 2"
+            >
+              Create an account to save your history.
+            </span>
+          )}
         </p>
       </div>
     </div>

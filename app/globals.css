@@ -115,6 +115,25 @@ body {
   animation: fadeSlideIn 200ms ease forwards;
 }
 
+/* Dashboard project grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* "Generating…" pulse on preview header */
 @keyframes generatingPulse {
   0%, 100% { opacity: 1; }

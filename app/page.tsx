@@ -1,14 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
+import type { User } from "@supabase/supabase-js";
 import type { Tab } from "@/app/types";
+import { createClient } from "@/lib/supabase/client";
 import TabNav from "@/app/components/TabNav";
 import BuildTab from "@/app/components/BuildTab";
 import PromptsTab from "@/app/components/PromptsTab";
 import LearnTab from "@/app/components/LearnTab";
+import UserMenu from "@/app/components/UserMenu";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("build");
+  const [user, setUser] = useState<User | null>(null);
+
+  const supabase = useMemo(() => createClient(), []);
+
+  useEffect(() => {
+    // Get the current user on mount
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+
+    // Keep auth state in sync across tab focus / sign-in from other tabs
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
 
   return (
     <div
@@ -27,47 +47,60 @@ export default function Home() {
             margin: "0 auto",
           }}
         >
-          {/* Wordmark row */}
-          <div style={{ paddingTop: "24px", paddingBottom: "16px" }}>
-            <h1
-              aria-label="UXMD"
-              style={{
-                fontFamily: "var(--font-bebas)",
-                fontSize: "32px",
-                letterSpacing: "0.04em",
-                textTransform: "uppercase",
-                lineHeight: 1,
-                userSelect: "none",
-                marginBottom: "2px",
-              }}
-            >
-              <span style={{ color: "var(--uxmd-text)" }}>UX</span>
-              <span style={{ color: "var(--uxmd-pink)" }}>M</span>
-              <span style={{ color: "var(--uxmd-purple)" }}>D</span>
-            </h1>
-            {/* Decorative accent bar — pink → purple, spec: 2px only under wordmark */}
-            <div
-              aria-hidden
-              style={{
-                height: "2px",
-                width: "72px",
-                background:
-                  "linear-gradient(to right, var(--uxmd-pink), var(--uxmd-purple))",
-                borderRadius: "1px",
-                marginBottom: "6px",
-              }}
-            />
-            <p
-              style={{
-                fontFamily: "var(--font-dm-sans)",
-                fontSize: "12px",
-                textTransform: "uppercase",
-                letterSpacing: "0.06em",
-                color: "var(--uxmd-text-muted)",
-              }}
-            >
-              Using AI to build context for AI - a UX designer tool
-            </p>
+          {/* Wordmark row — flex so UserMenu can sit top-right */}
+          <div
+            style={{
+              paddingTop: "24px",
+              paddingBottom: "16px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+            }}
+          >
+            <div>
+              <h1
+                aria-label="UXMD"
+                style={{
+                  fontFamily: "var(--font-bebas)",
+                  fontSize: "32px",
+                  letterSpacing: "0.04em",
+                  textTransform: "uppercase",
+                  lineHeight: 1,
+                  userSelect: "none",
+                  marginBottom: "2px",
+                }}
+              >
+                <span style={{ color: "var(--uxmd-text)" }}>UX</span>
+                <span style={{ color: "var(--uxmd-pink)" }}>M</span>
+                <span style={{ color: "var(--uxmd-purple)" }}>D</span>
+              </h1>
+              {/* Decorative accent bar — pink → purple, spec: 2px only under wordmark */}
+              <div
+                aria-hidden
+                style={{
+                  height: "2px",
+                  width: "72px",
+                  background:
+                    "linear-gradient(to right, var(--uxmd-pink), var(--uxmd-purple))",
+                  borderRadius: "1px",
+                  marginBottom: "6px",
+                }}
+              />
+              <p
+                style={{
+                  fontFamily: "var(--font-dm-sans)",
+                  fontSize: "12px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                  color: "var(--uxmd-text-muted)",
+                }}
+              >
+                Using AI to build context for AI - a UX designer tool
+              </p>
+            </div>
+
+            {/* User menu — shown when signed in */}
+            {user && <UserMenu user={user} />}
           </div>
 
           {/* Full-width accent bar between tagline and tab nav */}
@@ -76,8 +109,7 @@ export default function Home() {
             style={{
               height: "2px",
               width: "100%",
-              background:
-                "linear-gradient(to right, #F72585, #9B5DE5)",
+              background: "linear-gradient(to right, #F72585, #9B5DE5)",
               borderRadius: "1px",
               marginBottom: "0",
             }}
@@ -90,7 +122,7 @@ export default function Home() {
 
       {/* Tab content */}
       <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        {activeTab === "build" && <BuildTab />}
+        {activeTab === "build" && <BuildTab user={user} />}
         {activeTab === "prompts" && <PromptsTab />}
         {activeTab === "learn" && <LearnTab />}
       </main>
