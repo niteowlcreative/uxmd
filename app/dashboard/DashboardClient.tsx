@@ -183,34 +183,35 @@ export default function DashboardClient({
         padding: "40px 32px 64px",
       }}
     >
-      {/* Page heading */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          marginBottom: "32px",
-          flexWrap: "wrap",
-          gap: "16px",
-        }}
-      >
-        <h2
+      {/* Heading + CTA row — only shown when projects exist */}
+      {hasProjects && (
+        <div
           style={{
-            fontFamily: "var(--font-bebas)",
-            fontSize: "36px",
-            letterSpacing: "0.03em",
-            textTransform: "uppercase",
-            color: "var(--uxmd-text)",
-            margin: 0,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "32px",
+            flexWrap: "wrap",
+            gap: "16px",
           }}
         >
-          My Projects
-        </h2>
-        {/* CTA only when projects exist — empty state has its own */}
-        {hasProjects && newProjectLink}
-      </div>
+          <h2
+            style={{
+              fontFamily: "var(--font-bebas)",
+              fontSize: "36px",
+              letterSpacing: "0.03em",
+              textTransform: "uppercase",
+              color: "var(--uxmd-text)",
+              margin: 0,
+            }}
+          >
+            My Projects
+          </h2>
+          {newProjectLink}
+        </div>
+      )}
 
-      {/* Empty state */}
+      {/* Empty state — only shown when no projects; heading is hidden */}
       {!hasProjects ? (
         <div style={{ textAlign: "center", padding: "80px 32px" }}>
           <h3
