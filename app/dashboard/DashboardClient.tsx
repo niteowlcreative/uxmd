@@ -176,13 +176,10 @@ export default function DashboardClient({
   );
 
   return (
-    <div
-      style={{
-        maxWidth: "1200px",
-        margin: "0 auto",
-        padding: "40px 32px 64px",
-      }}
-    >
+    // Outer wrapper matches the header's padding: "0 32px" structure so the
+    // inner 1200px box aligns flush with the nav tabs above.
+    <div style={{ padding: "40px 32px 64px" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
       {/* Heading + CTA row — only shown when projects exist */}
       {hasProjects && (
         <div
@@ -545,6 +542,7 @@ export default function DashboardClient({
           </p>
         </>
       )}
+      </div>
     </div>
   );
 }
