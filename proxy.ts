@@ -53,7 +53,11 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Run on all paths except static assets, images, and favicon.
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // Run on all paths except:
+    //  - Next.js internals (_next/static, _next/image)
+    //  - Static files (favicon, images)
+    //  - /auth/callback — must reach the route handler untouched so the
+    //    PKCE code exchange can complete before any session cookie is written
+    "/((?!_next/static|_next/image|favicon.ico|auth/callback|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
