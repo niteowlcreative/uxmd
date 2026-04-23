@@ -31,9 +31,40 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  // Auth indicator shown flush-right in the tab nav row
+  // Auth indicator shown flush-right in the tab nav row.
+  // When logged in, a Dashboard link sits left of the UserMenu, styled to
+  // match the inactive tab appearance.
   const authSlot = user ? (
-    <UserMenu user={user} />
+    <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+      <Link
+        href="/dashboard"
+        style={{
+          fontFamily: "var(--font-bebas)",
+          fontSize: "15px",
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
+          color: "var(--uxmd-text-muted)",
+          textDecoration: "none",
+          paddingBottom: "14px",
+          paddingTop: "16px",
+          borderBottom: "2px solid transparent",
+          display: "inline-block",
+          transition: "color 150ms ease, border-color 150ms ease",
+          whiteSpace: "nowrap",
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLAnchorElement).style.color =
+            "var(--uxmd-text)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLAnchorElement).style.color =
+            "var(--uxmd-text-muted)";
+        }}
+      >
+        Dashboard
+      </Link>
+      <UserMenu user={user} />
+    </div>
   ) : (
     <Link
       href="/login"
