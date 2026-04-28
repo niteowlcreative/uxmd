@@ -25,7 +25,7 @@ export default function ButtonGroup({ options, value, onChange }: ButtonGroupPro
               borderRadius: "6px",
               padding: "6px 14px",
               fontFamily: "var(--font-dm-sans)",
-              fontSize: "13px",
+              fontSize: "15px",
               cursor: "pointer",
               transition: "all 150ms ease",
               whiteSpace: "nowrap",

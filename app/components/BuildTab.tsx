@@ -29,7 +29,7 @@ export default function BuildTab({ user }: BuildTabProps) {
         <p
           style={{
             fontFamily: "var(--font-dm-sans)",
-            fontSize: "15px",
+            fontSize: "17px",
             color: "var(--uxmd-text-muted)",
             marginBottom: "32px",
           }}
@@ -39,7 +39,7 @@ export default function BuildTab({ user }: BuildTabProps) {
             style={{
               fontFamily: "monospace",
               color: "var(--uxmd-pink)",
-              fontSize: "14px",
+              fontSize: "16px",
             }}
           >
             DESIGN.md
@@ -87,7 +87,7 @@ export default function BuildTab({ user }: BuildTabProps) {
               <span
                 style={{
                   fontFamily: "var(--font-bebas)",
-                  fontSize: "11px",
+                  fontSize: "13px",
                   letterSpacing: "0.06em",
                   color: "var(--uxmd-pink)",
                 }}
@@ -97,7 +97,7 @@ export default function BuildTab({ user }: BuildTabProps) {
               <span
                 style={{
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: "13px",
+                  fontSize: "15px",
                   color: "var(--uxmd-text-muted)",
                   maxWidth: "160px",
                   textAlign: "center",
@@ -120,7 +120,7 @@ export default function BuildTab({ user }: BuildTabProps) {
             padding: "9px 20px",
             borderRadius: "0.5rem",
             fontFamily: "var(--font-bebas)",
-            fontSize: "16px",
+            fontSize: "18px",
             letterSpacing: "0.06em",
             textTransform: "uppercase",
             cursor: "pointer",
@@ -143,7 +143,7 @@ export default function BuildTab({ user }: BuildTabProps) {
         <p
           style={{
             fontFamily: "var(--font-dm-sans)",
-            fontSize: "12px",
+            fontSize: "14px",
             color: "var(--uxmd-text-dim)",
             marginTop: "16px",
             letterSpacing: "0.02em",

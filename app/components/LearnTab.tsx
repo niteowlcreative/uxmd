@@ -43,7 +43,7 @@ const SECTIONS: Section[] = [
           <p
             style={{
               fontFamily: "var(--font-bebas)",
-              fontSize: "13px",
+              fontSize: "15px",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               color: "var(--uxmd-text-dim)",
@@ -106,7 +106,7 @@ const SECTIONS: Section[] = [
                 style={{
                   fontFamily: "var(--font-dm-sans)",
                   fontWeight: 500,
-                  fontSize: "14px",
+                  fontSize: "16px",
                   color: "var(--uxmd-text)",
                   marginBottom: "6px",
                 }}
@@ -116,7 +116,7 @@ const SECTIONS: Section[] = [
               <p
                 style={{
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: "14px",
+                  fontSize: "16px",
                   color: "var(--uxmd-text-muted)",
                   lineHeight: 1.6,
                 }}
@@ -155,7 +155,7 @@ const SECTIONS: Section[] = [
           <p
             style={{
               fontFamily: "var(--font-bebas)",
-              fontSize: "13px",
+              fontSize: "15px",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               color: "var(--uxmd-text-dim)",
@@ -174,7 +174,7 @@ const SECTIONS: Section[] = [
                 style={{
                   display: "inline-block",
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: "11px",
+                  fontSize: "13px",
                   fontWeight: 500,
                   textTransform: "uppercase",
                   letterSpacing: "0.04em",
@@ -196,7 +196,7 @@ const SECTIONS: Section[] = [
               <p
                 style={{
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: "13px",
+                  fontSize: "15px",
                   color: "var(--uxmd-text-muted)",
                 }}
               >
@@ -262,7 +262,7 @@ const SECTIONS: Section[] = [
           <p
             style={{
               fontFamily: "var(--font-bebas)",
-              fontSize: "13px",
+              fontSize: "15px",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               color: "var(--uxmd-text-dim)",
@@ -319,7 +319,7 @@ const SECTIONS: Section[] = [
               style={{
                 fontFamily: "var(--font-dm-sans)",
                 fontWeight: 500,
-                fontSize: "15px",
+                fontSize: "17px",
                 color: "var(--uxmd-text)",
                 marginBottom: "8px",
               }}
@@ -329,7 +329,7 @@ const SECTIONS: Section[] = [
             <p
               style={{
                 fontFamily: "var(--font-dm-sans)",
-                fontSize: "14px",
+                fontSize: "16px",
                 color: "var(--uxmd-text-muted)",
                 lineHeight: 1.6,
               }}
@@ -370,7 +370,7 @@ export default function LearnTab() {
         <p
           style={{
             fontFamily: "var(--font-dm-sans)",
-            fontSize: "11px",
+            fontSize: "13px",
             fontWeight: 500,
             letterSpacing: "0.08em",
             textTransform: "uppercase",
@@ -396,7 +396,7 @@ export default function LearnTab() {
                   padding: "8px 12px",
                   textAlign: "left",
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: "13px",
+                  fontSize: "15px",
                   color: isActive
                     ? "var(--uxmd-text)"
                     : "var(--uxmd-text-muted)",
@@ -427,7 +427,7 @@ export default function LearnTab() {
         <h2
           style={{
             fontFamily: "var(--font-bebas)",
-            fontSize: "36px",
+            fontSize: "42px",
             letterSpacing: "0.03em",
             textTransform: "uppercase",
             color: "var(--uxmd-text)",
@@ -439,7 +439,7 @@ export default function LearnTab() {
         <div
           style={{
             fontFamily: "var(--font-dm-sans)",
-            fontSize: "15px",
+            fontSize: "17px",
             color: "var(--uxmd-text-muted)",
             lineHeight: 1.6,
           }}

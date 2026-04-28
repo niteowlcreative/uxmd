@@ -29,7 +29,7 @@ export default function UserMenu({ user }: UserMenuProps) {
       <span
         style={{
           fontFamily: "var(--font-dm-sans)",
-          fontSize: "12px",
+          fontSize: "14px",
           color: "var(--uxmd-text-muted)",
         }}
       >
@@ -44,7 +44,7 @@ export default function UserMenu({ user }: UserMenuProps) {
           padding: "6px 14px",
           borderRadius: "0.5rem",
           fontFamily: "var(--font-bebas)",
-          fontSize: "14px",
+          fontSize: "16px",
           letterSpacing: "0.06em",
           textTransform: "uppercase",
           cursor: "pointer",

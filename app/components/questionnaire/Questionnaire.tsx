@@ -161,7 +161,7 @@ export default function Questionnaire({
         <p
           style={{
             fontFamily: "var(--font-dm-sans)",
-            fontSize: "12px",
+            fontSize: "14px",
             color: "var(--uxmd-text-muted)",
             margin: 0,
             lineHeight: 1.5,
@@ -185,7 +185,7 @@ export default function Questionnaire({
               <p
                 style={{
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   color: "var(--uxmd-text-muted)",
                   marginBottom: "4px",
                 }}
@@ -212,7 +212,7 @@ export default function Questionnaire({
               <p
                 style={{
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: "13px",
+                  fontSize: "15px",
                   color: "var(--uxmd-text-muted)",
                   marginBottom: "28px",
                   lineHeight: 1.5,
@@ -226,7 +226,7 @@ export default function Questionnaire({
                 <p
                   style={{
                     fontFamily: "var(--font-dm-sans)",
-                    fontSize: "13px",
+                    fontSize: "15px",
                     color: "var(--uxmd-pink)",
                     marginBottom: "12px",
                   }}
@@ -261,7 +261,7 @@ export default function Questionnaire({
                       padding: "8px 20px",
                       borderRadius: "0.5rem",
                       fontFamily: "var(--font-bebas)",
-                      fontSize: "16px",
+                      fontSize: "18px",
                       letterSpacing: "0.06em",
                       textTransform: "uppercase",
                       cursor: "pointer",
@@ -291,7 +291,7 @@ export default function Questionnaire({
                     padding: "9px 24px",
                     borderRadius: "0.5rem",
                     fontFamily: "var(--font-bebas)",
-                    fontSize: "16px",
+                    fontSize: "18px",
                     letterSpacing: "0.06em",
                     textTransform: "uppercase",
                     cursor: "pointer",
@@ -323,7 +323,7 @@ export default function Questionnaire({
                       background: "none",
                       border: "none",
                       fontFamily: "var(--font-dm-sans)",
-                      fontSize: "13px",
+                      fontSize: "15px",
                       color: "var(--uxmd-text-muted)",
                       cursor: "pointer",
                       padding: "0",
@@ -360,7 +360,7 @@ export default function Questionnaire({
               <p
                 style={{
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: "15px",
+                  fontSize: "17px",
                   color: "var(--uxmd-text-muted)",
                   marginBottom: "32px",
                   maxWidth: "480px",
@@ -399,7 +399,7 @@ export default function Questionnaire({
                         padding: "8px 20px",
                         borderRadius: "0.5rem",
                         fontFamily: "var(--font-bebas)",
-                        fontSize: "16px",
+                        fontSize: "18px",
                         letterSpacing: "0.06em",
                         textTransform: "uppercase",
                         cursor:
@@ -437,7 +437,7 @@ export default function Questionnaire({
                       <span
                         style={{
                           fontFamily: "var(--font-dm-sans)",
-                          fontSize: "13px",
+                          fontSize: "15px",
                           color: "var(--uxmd-text-muted)",
                         }}
                       >
@@ -464,7 +464,7 @@ export default function Questionnaire({
                       <span
                         style={{
                           fontFamily: "var(--font-dm-sans)",
-                          fontSize: "13px",
+                          fontSize: "15px",
                           color: "var(--uxmd-pink)",
                         }}
                       >
@@ -488,7 +488,7 @@ export default function Questionnaire({
                       padding: "9px 24px",
                       borderRadius: "0.5rem",
                       fontFamily: "var(--font-bebas)",
-                      fontSize: "16px",
+                      fontSize: "18px",
                       letterSpacing: "0.06em",
                       textTransform: "uppercase",
                       cursor: "pointer",
@@ -542,7 +542,7 @@ export default function Questionnaire({
                     <span
                       style={{
                         fontFamily: "var(--font-dm-sans)",
-                        fontSize: "13px",
+                        fontSize: "15px",
                         color: "var(--uxmd-text)",
                       }}
                     >
@@ -581,7 +581,7 @@ export default function Questionnaire({
                         <p
                           style={{
                             fontFamily: "var(--font-dm-sans)",
-                            fontSize: "13px",
+                            fontSize: "15px",
                             color: "var(--uxmd-text-muted)",
                             marginBottom: "16px",
                             lineHeight: 1.5,
@@ -594,7 +594,7 @@ export default function Questionnaire({
                           <p
                             style={{
                               fontFamily: "var(--font-dm-sans)",
-                              fontSize: "13px",
+                              fontSize: "15px",
                               color: "var(--uxmd-text-muted)",
                             }}
                           >
@@ -626,7 +626,7 @@ export default function Questionnaire({
                                 padding: "8px 20px",
                                 borderRadius: "0.5rem",
                                 fontFamily: "var(--font-bebas)",
-                                fontSize: "15px",
+                                fontSize: "17px",
                                 letterSpacing: "0.06em",
                                 textTransform: "uppercase",
                                 cursor: saveStatus === "saving" ? "not-allowed" : "pointer",
@@ -652,7 +652,7 @@ export default function Questionnaire({
                                 padding: "7px 20px",
                                 borderRadius: "0.5rem",
                                 fontFamily: "var(--font-bebas)",
-                                fontSize: "15px",
+                                fontSize: "17px",
                                 letterSpacing: "0.06em",
                                 textTransform: "uppercase",
                                 cursor: "pointer",
@@ -673,7 +673,7 @@ export default function Questionnaire({
                               <span
                                 style={{
                                   fontFamily: "var(--font-dm-sans)",
-                                  fontSize: "12px",
+                                  fontSize: "14px",
                                   color: "var(--uxmd-pink)",
                                   alignSelf: "center",
                                 }}
@@ -703,7 +703,7 @@ export default function Questionnaire({
                         <p
                           style={{
                             fontFamily: "var(--font-dm-sans)",
-                            fontSize: "13px",
+                            fontSize: "15px",
                             color: "var(--uxmd-text-muted)",
                             marginBottom: "16px",
                             lineHeight: 1.5,
@@ -725,7 +725,7 @@ export default function Questionnaire({
                               padding: "8px 20px",
                               borderRadius: "0.5rem",
                               fontFamily: "var(--font-bebas)",
-                              fontSize: "15px",
+                              fontSize: "17px",
                               letterSpacing: "0.06em",
                               textTransform: "uppercase",
                               textDecoration: "none",
@@ -753,7 +753,7 @@ export default function Questionnaire({
                               padding: "7px 20px",
                               borderRadius: "0.5rem",
                               fontFamily: "var(--font-bebas)",
-                              fontSize: "15px",
+                              fontSize: "17px",
                               letterSpacing: "0.06em",
                               textTransform: "uppercase",
                               cursor: "pointer",
@@ -790,7 +790,7 @@ export default function Questionnaire({
                       padding: "8px 20px",
                       borderRadius: "0.5rem",
                       fontFamily: "var(--font-bebas)",
-                      fontSize: "16px",
+                      fontSize: "18px",
                       letterSpacing: "0.06em",
                       textTransform: "uppercase",
                       cursor: "pointer",

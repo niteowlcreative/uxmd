@@ -180,7 +180,7 @@ export default function PromptsTab() {
         <h2
           style={{
             fontFamily: "var(--font-bebas)",
-            fontSize: "36px",
+            fontSize: "42px",
             letterSpacing: "0.03em",
             textTransform: "uppercase",
             color: "var(--uxmd-text)",
@@ -192,7 +192,7 @@ export default function PromptsTab() {
         <p
           style={{
             fontFamily: "var(--font-dm-sans)",
-            fontSize: "15px",
+            fontSize: "17px",
             color: "var(--uxmd-text-muted)",
             marginBottom: "24px",
           }}
@@ -214,7 +214,7 @@ export default function PromptsTab() {
             padding: "10px 14px",
             color: "var(--uxmd-text)",
             fontFamily: "var(--font-dm-sans)",
-            fontSize: "14px",
+            fontSize: "16px",
             width: "100%",
             maxWidth: "480px",
             outline: "none",
@@ -232,7 +232,7 @@ export default function PromptsTab() {
         <p
           style={{
             fontFamily: "var(--font-dm-sans)",
-            fontSize: "15px",
+            fontSize: "17px",
             color: "var(--uxmd-text-muted)",
           }}
         >
@@ -244,7 +244,7 @@ export default function PromptsTab() {
             <h3
               style={{
                 fontFamily: "var(--font-bebas)",
-                fontSize: "13px",
+                fontSize: "15px",
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 color: "var(--uxmd-text-dim)",
@@ -310,7 +310,7 @@ export default function PromptsTab() {
                         padding: "4px 12px",
                         borderRadius: "6px",
                         fontFamily: "var(--font-bebas)",
-                        fontSize: "13px",
+                        fontSize: "15px",
                         letterSpacing: "0.06em",
                         textTransform: "uppercase",
                         cursor: "pointer",
@@ -325,7 +325,7 @@ export default function PromptsTab() {
                   <p
                     style={{
                       fontFamily: "var(--font-dm-sans)",
-                      fontSize: "13px",
+                      fontSize: "15px",
                       color: "var(--uxmd-text-muted)",
                       lineHeight: 1.5,
                     }}
@@ -335,7 +335,7 @@ export default function PromptsTab() {
                   <p
                     style={{
                       fontFamily: "var(--font-dm-sans)",
-                      fontSize: "11px",
+                      fontSize: "13px",
                       color: "var(--uxmd-text-dim)",
                       letterSpacing: "0.04em",
                       textTransform: "uppercase",

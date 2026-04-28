@@ -87,7 +87,7 @@ export default async function EditProjectPage({ params }: Props) {
               <p
                 style={{
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   textTransform: "uppercase",
                   letterSpacing: "0.06em",
                   color: "var(--uxmd-text-muted)",
@@ -119,7 +119,7 @@ export default async function EditProjectPage({ params }: Props) {
               href="/dashboard"
               style={{
                 fontFamily: "var(--font-dm-sans)",
-                fontSize: "13px",
+                fontSize: "15px",
                 color: "var(--uxmd-text-muted)",
                 textDecoration: "none",
                 transition: "color 150ms ease",

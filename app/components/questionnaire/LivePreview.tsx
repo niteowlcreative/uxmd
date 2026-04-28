@@ -91,7 +91,7 @@ export default function LivePreview({ formData, isTyping }: LivePreviewProps) {
         <span
           style={{
             fontFamily: "var(--font-dm-sans)",
-            fontSize: "11px",
+            fontSize: "13px",
             fontWeight: 500,
             textTransform: "uppercase",
             letterSpacing: "0.08em",
@@ -105,7 +105,7 @@ export default function LivePreview({ formData, isTyping }: LivePreviewProps) {
             className="preview-generating"
             style={{
               fontFamily: "var(--font-dm-sans)",
-              fontSize: "11px",
+              fontSize: "13px",
               color: "var(--uxmd-pink)",
               letterSpacing: "0.04em",
             }}
@@ -126,7 +126,7 @@ export default function LivePreview({ formData, isTyping }: LivePreviewProps) {
         <pre
           style={{
             fontFamily: "ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, monospace",
-            fontSize: "12px",
+            fontSize: "14px",
             lineHeight: 1.7,
             margin: 0,
             whiteSpace: "pre-wrap",

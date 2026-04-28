@@ -50,7 +50,7 @@ export default function ProgressDots({
               <span
                 style={{
                   fontFamily: "var(--font-bebas)",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   letterSpacing: "0.02em",
                   color: isPending ? "var(--uxmd-text-dim)" : "#ffffff",
                   lineHeight: 1,

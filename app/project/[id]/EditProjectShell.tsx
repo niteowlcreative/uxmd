@@ -34,7 +34,7 @@ export default function EditProjectShell({
         <p
           style={{
             fontFamily: "var(--font-bebas)",
-            fontSize: "14px",
+            fontSize: "16px",
             letterSpacing: "0.06em",
             textTransform: "uppercase",
             color: "var(--uxmd-text-muted)",

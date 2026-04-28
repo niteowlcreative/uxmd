@@ -81,7 +81,7 @@ export default async function DashboardPage() {
               <p
                 style={{
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   textTransform: "uppercase",
                   letterSpacing: "0.06em",
                   color: "var(--uxmd-text-muted)",
@@ -117,7 +117,7 @@ export default async function DashboardPage() {
                 href="/"
                 style={{
                   fontFamily: "var(--font-bebas)",
-                  fontSize: "15px",
+                  fontSize: "17px",
                   letterSpacing: "0.06em",
                   textTransform: "uppercase",
                   color: "var(--uxmd-text-muted)",

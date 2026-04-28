@@ -15,7 +15,7 @@ interface StepFieldsProps {
 const labelStyle: React.CSSProperties = {
   display: "block",
   fontFamily: "var(--font-dm-sans)",
-  fontSize: "11px",
+  fontSize: "13px",
   fontWeight: 500,
   textTransform: "uppercase",
   letterSpacing: "0.08em",
@@ -31,13 +31,13 @@ const inputStyle: React.CSSProperties = {
   padding: "10px 14px",
   color: "var(--uxmd-text)",
   fontFamily: "var(--font-dm-sans)",
-  fontSize: "14px",
+  fontSize: "16px",
   outline: "none",
 };
 
 const helperStyle: React.CSSProperties = {
   fontFamily: "var(--font-dm-sans)",
-  fontSize: "12px",
+  fontSize: "14px",
   color: "var(--uxmd-text-dim)",
   marginTop: "6px",
   lineHeight: 1.5,
@@ -351,7 +351,7 @@ export default function StepFields({
                     borderRadius: "6px",
                     padding: "6px 14px",
                     fontFamily: "var(--font-dm-sans)",
-                    fontSize: "13px",
+                    fontSize: "15px",
                     cursor: "pointer",
                     transition: "all 150ms ease",
                   }}

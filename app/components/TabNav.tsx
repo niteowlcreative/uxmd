@@ -33,7 +33,7 @@ export default function TabNav({ activeTab, onChange, rightSlot }: TabNavProps) 
               onClick={() => onChange(id)}
               style={{
                 fontFamily: "var(--font-bebas)",
-                fontSize: "15px",
+                fontSize: "17px",
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 color: isActive ? "var(--uxmd-pink)" : "var(--uxmd-text-muted)",

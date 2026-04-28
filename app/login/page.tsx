@@ -22,7 +22,7 @@ const GHOST_BTN: React.CSSProperties = {
   padding: "10px 20px",
   borderRadius: "0.5rem",
   fontFamily: "var(--font-bebas)",
-  fontSize: "16px",
+  fontSize: "18px",
   letterSpacing: "0.06em",
   textTransform: "uppercase",
   cursor: "pointer",
@@ -71,7 +71,7 @@ function FormContent({
       <p
         style={{
           fontFamily: "var(--font-dm-sans)",
-          fontSize: "13px",
+          fontSize: "15px",
           color: "var(--uxmd-text-muted)",
           marginBottom: "24px",
           lineHeight: 1.5,
@@ -90,7 +90,7 @@ function FormContent({
             style={{
               display: "block",
               fontFamily: "var(--font-dm-sans)",
-              fontSize: "11px",
+              fontSize: "13px",
               fontWeight: 500,
               textTransform: "uppercase",
               letterSpacing: "0.08em",
@@ -115,7 +115,7 @@ function FormContent({
               padding: "10px 14px",
               color: "var(--uxmd-text)",
               fontFamily: "var(--font-dm-sans)",
-              fontSize: "14px",
+              fontSize: "16px",
               outline: "none",
               boxSizing: "border-box",
             }}
@@ -132,7 +132,7 @@ function FormContent({
           <p
             style={{
               fontFamily: "var(--font-dm-sans)",
-              fontSize: "12px",
+              fontSize: "14px",
               color: "var(--uxmd-pink)",
               marginBottom: "12px",
               lineHeight: 1.4,
@@ -158,7 +158,7 @@ function FormContent({
             padding: "10px 20px",
             borderRadius: "0.5rem",
             fontFamily: "var(--font-bebas)",
-            fontSize: "16px",
+            fontSize: "18px",
             letterSpacing: "0.06em",
             textTransform: "uppercase",
             cursor: disabled ? "not-allowed" : "pointer",
@@ -190,7 +190,7 @@ function FormContent({
       <p
         style={{
           fontFamily: "var(--font-dm-sans)",
-          fontSize: "13px",
+          fontSize: "15px",
           color: "var(--uxmd-text-muted)",
           textAlign: "center",
           margin: 0,
@@ -242,7 +242,7 @@ function SuccessContent({
       <h2
         style={{
           fontFamily: "var(--font-bebas)",
-          fontSize: "24px",
+          fontSize: "28px",
           letterSpacing: "0.03em",
           textTransform: "uppercase",
           color: "var(--uxmd-text)",
@@ -258,7 +258,7 @@ function SuccessContent({
       <p
         style={{
           fontFamily: "var(--font-dm-sans)",
-          fontSize: "13px",
+          fontSize: "15px",
           color: "var(--uxmd-text-muted)",
           lineHeight: 1.6,
           marginBottom: "24px",

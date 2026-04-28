@@ -47,7 +47,7 @@ const actionBtnStyle: React.CSSProperties = {
   background: "none",
   border: "none",
   fontFamily: "var(--font-dm-sans)",
-  fontSize: "13px",
+  fontSize: "15px",
   color: "var(--uxmd-text-muted)",
   cursor: "pointer",
   padding: "2px 0",
@@ -59,7 +59,7 @@ const actionBtnStyle: React.CSSProperties = {
 
 const thStyle: React.CSSProperties = {
   fontFamily: "var(--font-dm-sans)",
-  fontSize: "11px",
+  fontSize: "13px",
   fontWeight: 400,
   textTransform: "uppercase",
   letterSpacing: "0.08em",
@@ -75,7 +75,7 @@ const tdStyle: React.CSSProperties = {
   padding: "16px 16px 16px 0",
   borderBottom: "0.5px solid rgba(255,255,255,0.06)",
   fontFamily: "var(--font-dm-sans)",
-  fontSize: "14px",
+  fontSize: "16px",
   verticalAlign: "middle",
 };
 
@@ -155,7 +155,7 @@ export default function DashboardClient({
         padding: "9px 20px",
         borderRadius: "0.5rem",
         fontFamily: "var(--font-bebas)",
-        fontSize: "16px",
+        fontSize: "18px",
         letterSpacing: "0.06em",
         textTransform: "uppercase",
         textDecoration: "none",
@@ -195,7 +195,7 @@ export default function DashboardClient({
           <h2
             style={{
               fontFamily: "var(--font-bebas)",
-              fontSize: "36px",
+              fontSize: "42px",
               letterSpacing: "0.03em",
               textTransform: "uppercase",
               color: "var(--uxmd-text)",
@@ -226,7 +226,7 @@ export default function DashboardClient({
           <p
             style={{
               fontFamily: "var(--font-dm-sans)",
-              fontSize: "14px",
+              fontSize: "16px",
               color: "var(--uxmd-text-muted)",
               marginBottom: "24px",
             }}
@@ -294,7 +294,7 @@ export default function DashboardClient({
                           <span
                             style={{
                               fontFamily: "var(--font-dm-sans)",
-                              fontSize: "13px",
+                              fontSize: "15px",
                               color: "var(--uxmd-text-muted)",
                             }}
                           >
@@ -339,7 +339,7 @@ export default function DashboardClient({
                         href={`/project/${project.id}`}
                         style={{
                           fontFamily: "var(--font-bebas)",
-                          fontSize: "16px",
+                          fontSize: "18px",
                           letterSpacing: "0.03em",
                           textTransform: "uppercase",
                           color: "var(--uxmd-text)",
@@ -364,7 +364,7 @@ export default function DashboardClient({
                       {displayDesc ? (
                         <span
                           style={{
-                            fontSize: "13px",
+                            fontSize: "15px",
                             color: "rgba(240,238,232,0.45)",
                             display: "block",
                             overflow: "hidden",
@@ -377,7 +377,7 @@ export default function DashboardClient({
                       ) : (
                         <span
                           style={{
-                            fontSize: "13px",
+                            fontSize: "15px",
                             color: "rgba(240,238,232,0.25)",
                           }}
                         >
@@ -401,7 +401,7 @@ export default function DashboardClient({
                     <td
                       style={{
                         ...tdStyle,
-                        fontSize: "13px",
+                        fontSize: "15px",
                         color: isExpiringSoon
                           ? "#F72585"
                           : "rgba(240,238,232,0.45)",
@@ -496,7 +496,7 @@ export default function DashboardClient({
                             border: "none",
                             cursor: "pointer",
                             color: "rgba(240,238,232,0.3)",
-                            fontSize: "16px",
+                            fontSize: "18px",
                             lineHeight: 1,
                             padding: "2px 0",
                             transition: "color 150ms ease",
@@ -532,7 +532,7 @@ export default function DashboardClient({
           <p
             style={{
               fontFamily: "var(--font-dm-sans)",
-              fontSize: "12px",
+              fontSize: "14px",
               color: "var(--uxmd-text-dim)",
               marginTop: "40px",
             }}
