@@ -20,7 +20,7 @@ const LOADING_MESSAGES = [
   "Identifying colour palette...",
   "Analyzing typography...",
   "Mapping component patterns...",
-  "Asking Claude what matters...",
+  "Almost there...",
 ];
 
 /* ─── input style (matches the rest of the questionnaire) */
