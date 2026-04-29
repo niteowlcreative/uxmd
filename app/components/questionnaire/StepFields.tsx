@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import { Globe, PenTool, Edit3 } from "lucide-react";
 import type { FormData } from "./types";
 import ButtonGroup from "./ButtonGroup";
+import SiteImporter from "./SiteImporter";
 
 interface StepFieldsProps {
   step: number;
@@ -44,6 +47,10 @@ const helperStyle: React.CSSProperties = {
 };
 
 const fieldGap: React.CSSProperties = { marginBottom: "24px" };
+
+// ─── step 2 import mode ──────────────────────────────────────────────────────
+
+type ImportMode = "none" | "website" | "figma" | "manual" | "review";
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -120,6 +127,343 @@ function TextArea({
       }
       onBlur={(e) => (e.currentTarget.style.boxShadow = "none")}
     />
+  );
+}
+
+// ─── step 2 component (has local import-mode state) ─────────────────────────
+
+interface Step2FieldsProps {
+  formData: FormData;
+  onChange: (field: keyof FormData, value: string | boolean | null) => void;
+  onEnter: () => void;
+}
+
+function Step2Fields({ formData, onChange, onEnter }: Step2FieldsProps) {
+  const [importMode, setImportMode] = useState<ImportMode>("none");
+  const [importedDomain, setImportedDomain] = useState("");
+
+  const enterHandler =
+    (): React.KeyboardEventHandler<HTMLInputElement> =>
+    (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        onEnter();
+      }
+    };
+
+  /* ── option cards ───────────────────────────────────── */
+
+  const OPTIONS: {
+    id: "website" | "figma" | "manual";
+    icon: React.ReactNode;
+    label: string;
+    desc: string;
+  }[] = [
+    {
+      id: "website",
+      icon: <Globe size={20} strokeWidth={1.5} />,
+      label: "Import from a website",
+      desc: "Paste a URL and we'll extract your site's visual identity",
+    },
+    {
+      id: "figma",
+      icon: <PenTool size={20} strokeWidth={1.5} />,
+      label: "Import from Figma",
+      desc: "Paste a public Figma link to pull your design tokens",
+    },
+    {
+      id: "manual",
+      icon: <Edit3 size={20} strokeWidth={1.5} />,
+      label: "Start from scratch",
+      desc: "Fill in your visual language manually",
+    },
+  ];
+
+  const cardStyle = (id: "website" | "figma" | "manual"): React.CSSProperties => {
+    const active = importMode === id || (importMode === "review" && id === "website");
+    return {
+      flex: "1 1 0",
+      background: active ? "var(--uxmd-pink-muted)" : "var(--uxmd-surface)",
+      border: active ? "1px solid #F72585" : "0.5px solid var(--uxmd-border)",
+      borderRadius: "10px",
+      padding: "20px",
+      cursor: "pointer",
+      display: "flex",
+      flexDirection: "column",
+      gap: "8px",
+      transition: "border-color 150ms ease, background 150ms ease",
+    };
+  };
+
+  const handleCardClick = (id: "website" | "figma" | "manual") => {
+    if (id === "figma") {
+      setImportMode("figma");
+    } else if (id === "manual") {
+      setImportMode("manual");
+    } else {
+      setImportMode("website");
+    }
+  };
+
+  /* ── manual form fields (reused for both manual and review) ── */
+
+  const ManualFields = () => (
+    <div style={{ marginTop: "24px" }}>
+      <Field
+        label="Primary Colour"
+        helper="Hex values are ideal. If you don't have one yet, describe the feeling."
+      >
+        <TextInput
+          value={formData.primaryColour}
+          onChange={(v) => onChange("primaryColour", v)}
+          placeholder="#1A1A2E or 'deep navy — used only on CTAs and key moments'"
+          onKeyDown={enterHandler()}
+        />
+      </Field>
+      <Field label="Secondary / Accent">
+        <TextInput
+          value={formData.secondaryColour}
+          onChange={(v) => onChange("secondaryColour", v)}
+          placeholder="#F72585 or 'electric pink — high contrast against dark backgrounds'"
+          onKeyDown={enterHandler()}
+        />
+      </Field>
+      <Field
+        label="Background"
+        helper="This affects every surface decision your AI makes."
+      >
+        <ButtonGroup
+          options={["Light", "Dark", "Both"]}
+          value={formData.background}
+          onChange={(v) => onChange("background", v)}
+        />
+      </Field>
+      <Field
+        label="Typography"
+        helper="Font name is ideal. A style description works if you're still deciding."
+      >
+        <TextInput
+          value={formData.typography}
+          onChange={(v) => onChange("typography", v)}
+          placeholder="Inter, clean sans-serif / Editorial serif / Friendly and rounded"
+          onKeyDown={enterHandler()}
+        />
+      </Field>
+      <Field label="Spacing">
+        <ButtonGroup
+          options={["Tight and dense", "Balanced", "Open and airy"]}
+          value={formData.spacing}
+          onChange={(v) => onChange("spacing", v)}
+        />
+      </Field>
+      <Field label="Border Radius">
+        <ButtonGroup
+          options={["Sharp", "Subtle", "Soft", "Pill"]}
+          value={formData.borderRadius}
+          onChange={(v) => onChange("borderRadius", v)}
+        />
+      </Field>
+      <Field
+        label="Aesthetic Reference"
+        helper="Name a product, a material, a feeling. This is the most useful field on this step — don't leave it blank."
+      >
+        <TextInput
+          value={formData.aestheticReference}
+          onChange={(v) => onChange("aestheticReference", v)}
+          placeholder="'Think Linear meets Notion' or 'Warm, earthy, approachable'"
+          onKeyDown={enterHandler()}
+        />
+      </Field>
+    </div>
+  );
+
+  return (
+    <div>
+      {/* Heading */}
+      <p
+        style={{
+          fontFamily: "var(--font-bebas)",
+          fontSize: "20px",
+          letterSpacing: "0.04em",
+          textTransform: "uppercase",
+          color: "var(--uxmd-text-muted)",
+          marginBottom: "16px",
+        }}
+      >
+        Do you have existing design assets?
+      </p>
+
+      {/* Three option cards */}
+      <div style={{ display: "flex", gap: "12px", marginBottom: "4px" }}>
+        {OPTIONS.map((opt) => (
+          <div
+            key={opt.id}
+            style={cardStyle(opt.id)}
+            onClick={() => handleCardClick(opt.id)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleCardClick(opt.id);
+              }
+            }}
+          >
+            <span
+              style={{
+                color:
+                  importMode === opt.id || (importMode === "review" && opt.id === "website")
+                    ? "#F72585"
+                    : "var(--uxmd-text-muted)",
+                transition: "color 150ms ease",
+              }}
+            >
+              {opt.icon}
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-bebas)",
+                fontSize: "16px",
+                letterSpacing: "0.04em",
+                textTransform: "uppercase",
+                color: "var(--uxmd-text)",
+                lineHeight: 1.2,
+              }}
+            >
+              {opt.label}
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: "13px",
+                color: "var(--uxmd-text-muted)",
+                lineHeight: 1.4,
+              }}
+            >
+              {opt.desc}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Website import flow ──────────────────────────── */}
+      {importMode === "website" && (
+        <SiteImporter
+          onComplete={(fields, domain) => {
+            // Apply extracted fields to formData
+            for (const [key, value] of Object.entries(fields)) {
+              onChange(key as keyof FormData, value as string | boolean | null);
+            }
+            setImportedDomain(domain);
+            setImportMode("review");
+          }}
+          onSkipToManual={() => setImportMode("manual")}
+        />
+      )}
+
+      {/* ── Review state after import ─────────────────────── */}
+      {importMode === "review" && (
+        <>
+          {/* Confidence banner */}
+          <div
+            style={{
+              borderLeft: "2px solid var(--uxmd-pink)",
+              background: "rgba(247,37,133,0.06)",
+              borderRadius: "0 4px 4px 0",
+              padding: "8px 12px",
+              marginTop: "20px",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: "14px",
+                color: "var(--uxmd-text-muted)",
+                margin: 0,
+                lineHeight: 1.5,
+              }}
+            >
+              We extracted the following from{" "}
+              <span style={{ color: "var(--uxmd-text)" }}>{importedDomain}</span>. Review
+              each field and adjust anything that doesn&rsquo;t look right.
+            </p>
+          </div>
+          <ManualFields />
+        </>
+      )}
+
+      {/* ── Manual (Start from scratch) ───────────────────── */}
+      {importMode === "manual" && <ManualFields />}
+
+      {/* ── Figma placeholder ─────────────────────────────── */}
+      {importMode === "figma" && (
+        <div
+          style={{
+            marginTop: "20px",
+            background: "var(--uxmd-surface)",
+            border: "0.5px solid var(--uxmd-border)",
+            borderRadius: "10px",
+            padding: "24px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "var(--font-bebas)",
+              fontSize: "20px",
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+              color: "var(--uxmd-text)",
+            }}
+          >
+            Coming Soon
+          </p>
+          <p
+            style={{
+              fontFamily: "var(--font-dm-sans)",
+              fontSize: "15px",
+              color: "var(--uxmd-text-muted)",
+              lineHeight: 1.5,
+              maxWidth: "360px",
+            }}
+          >
+            Figma import is in development. For now, use the website import or fill in your
+            visual language manually.
+          </p>
+          <button
+            type="button"
+            onClick={() => setImportMode("manual")}
+            style={{
+              alignSelf: "flex-start",
+              background: "transparent",
+              color: "var(--uxmd-text-muted)",
+              border: "0.5px solid var(--uxmd-border-strong)",
+              padding: "8px 20px",
+              borderRadius: "0.5rem",
+              fontFamily: "var(--font-bebas)",
+              fontSize: "18px",
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+              transition: "all 150ms ease",
+              marginTop: "4px",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--uxmd-surface-2)";
+              e.currentTarget.style.color = "var(--uxmd-text)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "var(--uxmd-text-muted)";
+            }}
+          >
+            Fill in manually instead
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -232,75 +576,7 @@ export default function StepFields({
   }
 
   if (step === 2) {
-    return (
-      <div>
-        <Field
-          label="Primary Colour"
-          helper="Hex values are ideal. If you don't have one yet, describe the feeling."
-        >
-          <TextInput
-            value={formData.primaryColour}
-            onChange={(v) => onChange("primaryColour", v)}
-            placeholder="#1A1A2E or 'deep navy — used only on CTAs and key moments'"
-            onKeyDown={enterHandler()}
-          />
-        </Field>
-        <Field label="Secondary / Accent">
-          <TextInput
-            value={formData.secondaryColour}
-            onChange={(v) => onChange("secondaryColour", v)}
-            placeholder="#F72585 or 'electric pink — high contrast against dark backgrounds'"
-            onKeyDown={enterHandler()}
-          />
-        </Field>
-        <Field
-          label="Background"
-          helper="This affects every surface decision your AI makes."
-        >
-          <ButtonGroup
-            options={["Light", "Dark", "Both"]}
-            value={formData.background}
-            onChange={(v) => onChange("background", v)}
-          />
-        </Field>
-        <Field
-          label="Typography"
-          helper="Font name is ideal. A style description works if you're still deciding."
-        >
-          <TextInput
-            value={formData.typography}
-            onChange={(v) => onChange("typography", v)}
-            placeholder="Inter, clean sans-serif / Editorial serif / Friendly and rounded"
-            onKeyDown={enterHandler()}
-          />
-        </Field>
-        <Field label="Spacing">
-          <ButtonGroup
-            options={["Tight and dense", "Balanced", "Open and airy"]}
-            value={formData.spacing}
-            onChange={(v) => onChange("spacing", v)}
-          />
-        </Field>
-        <Field label="Border Radius">
-          <ButtonGroup
-            options={["Sharp", "Subtle", "Soft", "Pill"]}
-            value={formData.borderRadius}
-            onChange={(v) => onChange("borderRadius", v)}
-          />
-        </Field>
-        <Field
-          label="Aesthetic Reference"
-          helper="Name a product, a material, a feeling. This is the most useful field on this step — don't leave it blank."
-        >
-          <TextInput
-            value={formData.aestheticReference}
-            onChange={(v) => onChange("aestheticReference", v)}
-            placeholder="'Think Linear meets Notion' or 'Warm, earthy, approachable'"
-            onKeyDown={enterHandler()}
-          />
-        </Field>
-      </div>
-    );
+    return <Step2Fields formData={formData} onChange={onChange} onEnter={onEnter} />;
   }
 
   if (step === 3) {
