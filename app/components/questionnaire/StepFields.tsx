@@ -5,6 +5,7 @@ import { Globe, PenTool, Edit3 } from "lucide-react";
 import type { FormData } from "./types";
 import ButtonGroup from "./ButtonGroup";
 import SiteImporter from "./SiteImporter";
+import FigmaImporter from "./FigmaImporter";
 
 interface StepFieldsProps {
   step: number;
@@ -141,6 +142,7 @@ interface Step2FieldsProps {
 function Step2Fields({ formData, onChange, onEnter }: Step2FieldsProps) {
   const [importMode, setImportMode] = useState<ImportMode>("none");
   const [importedDomain, setImportedDomain] = useState("");
+  const [reviewSource, setReviewSource] = useState<"website" | "figma" | null>(null);
 
   const enterHandler =
     (): React.KeyboardEventHandler<HTMLInputElement> =>
@@ -180,7 +182,9 @@ function Step2Fields({ formData, onChange, onEnter }: Step2FieldsProps) {
   ];
 
   const cardStyle = (id: "website" | "figma" | "manual"): React.CSSProperties => {
-    const active = importMode === id || (importMode === "review" && id === "website");
+    const active =
+      importMode === id ||
+      (importMode === "review" && reviewSource === id);
     return {
       flex: "1 1 0",
       background: active ? "var(--uxmd-pink-muted)" : "var(--uxmd-surface)",
@@ -312,7 +316,8 @@ function Step2Fields({ formData, onChange, onEnter }: Step2FieldsProps) {
             <span
               style={{
                 color:
-                  importMode === opt.id || (importMode === "review" && opt.id === "website")
+                  importMode === opt.id ||
+                  (importMode === "review" && reviewSource === opt.id)
                     ? "#F72585"
                     : "var(--uxmd-text-muted)",
                 transition: "color 150ms ease",
@@ -350,11 +355,11 @@ function Step2Fields({ formData, onChange, onEnter }: Step2FieldsProps) {
       {importMode === "website" && (
         <SiteImporter
           onComplete={(fields, domain) => {
-            // Apply extracted fields to formData
             for (const [key, value] of Object.entries(fields)) {
               onChange(key as keyof FormData, value as string | boolean | null);
             }
             setImportedDomain(domain);
+            setReviewSource("website");
             setImportMode("review");
           }}
           onSkipToManual={() => setImportMode("manual")}
@@ -384,8 +389,11 @@ function Step2Fields({ formData, onChange, onEnter }: Step2FieldsProps) {
               }}
             >
               We extracted the following from{" "}
-              <span style={{ color: "var(--uxmd-text)" }}>{importedDomain}</span>. Review
-              each field and adjust anything that doesn&rsquo;t look right.
+              <span style={{ color: "var(--uxmd-text)" }}>{importedDomain}</span>.{" "}
+              {reviewSource === "figma" && formData.figmaComponents && (
+                <>Component names are shown on the next step. </>
+              )}
+              Review each field and adjust anything that doesn&rsquo;t look right.
             </p>
           </div>
           <ManualFields />
@@ -395,73 +403,19 @@ function Step2Fields({ formData, onChange, onEnter }: Step2FieldsProps) {
       {/* ── Manual (Start from scratch) ───────────────────── */}
       {importMode === "manual" && <ManualFields />}
 
-      {/* ── Figma placeholder ─────────────────────────────── */}
+      {/* ── Figma import flow ────────────────────────────── */}
       {importMode === "figma" && (
-        <div
-          style={{
-            marginTop: "20px",
-            background: "var(--uxmd-surface)",
-            border: "0.5px solid var(--uxmd-border)",
-            borderRadius: "10px",
-            padding: "24px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
+        <FigmaImporter
+          onComplete={(fields, domain) => {
+            for (const [key, value] of Object.entries(fields)) {
+              onChange(key as keyof FormData, value as string | boolean | null);
+            }
+            setImportedDomain(domain);
+            setReviewSource("figma");
+            setImportMode("review");
           }}
-        >
-          <p
-            style={{
-              fontFamily: "var(--font-bebas)",
-              fontSize: "20px",
-              letterSpacing: "0.04em",
-              textTransform: "uppercase",
-              color: "var(--uxmd-text)",
-            }}
-          >
-            Coming Soon
-          </p>
-          <p
-            style={{
-              fontFamily: "var(--font-dm-sans)",
-              fontSize: "15px",
-              color: "var(--uxmd-text-muted)",
-              lineHeight: 1.5,
-              maxWidth: "360px",
-            }}
-          >
-            Figma import is in development. For now, use the website import or fill in your
-            visual language manually.
-          </p>
-          <button
-            type="button"
-            onClick={() => setImportMode("manual")}
-            style={{
-              alignSelf: "flex-start",
-              background: "transparent",
-              color: "var(--uxmd-text-muted)",
-              border: "0.5px solid var(--uxmd-border-strong)",
-              padding: "8px 20px",
-              borderRadius: "0.5rem",
-              fontFamily: "var(--font-bebas)",
-              fontSize: "18px",
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              transition: "all 150ms ease",
-              marginTop: "4px",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--uxmd-surface-2)";
-              e.currentTarget.style.color = "var(--uxmd-text)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = "var(--uxmd-text-muted)";
-            }}
-          >
-            Fill in manually instead
-          </button>
-        </div>
+          onSkipToManual={() => setImportMode("manual")}
+        />
       )}
     </div>
   );
@@ -580,8 +534,61 @@ export default function StepFields({
   }
 
   if (step === 3) {
+    const figmaComponents = formData.figmaComponents
+      ? formData.figmaComponents.split(",").filter(Boolean)
+      : [];
+
     return (
       <div>
+        {/* ── Figma component badges ──────────────────────── */}
+        {figmaComponents.length > 0 && (
+          <div style={{ marginBottom: "28px" }}>
+            <p
+              style={{
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: "13px",
+                fontWeight: 500,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                color: "var(--uxmd-text-muted)",
+                marginBottom: "10px",
+              }}
+            >
+              Components found in your Figma file
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+              {figmaComponents.map((name) => (
+                <span
+                  key={name}
+                  style={{
+                    background: "var(--uxmd-purple-muted)",
+                    color: "var(--uxmd-purple)",
+                    border: "0.5px solid var(--uxmd-purple)",
+                    borderRadius: "4px",
+                    padding: "3px 10px",
+                    fontFamily: "var(--font-dm-sans)",
+                    fontSize: "13px",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {name}
+                </span>
+              ))}
+            </div>
+            <p
+              style={{
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: "13px",
+                color: "var(--uxmd-text-dim)",
+                marginTop: "8px",
+                lineHeight: 1.5,
+              }}
+            >
+              These component names will be referenced in your DESIGN.md.
+            </p>
+          </div>
+        )}
+
         <Field
           label="Button Hierarchy"
           helper="Describe how your buttons differ from each other — not just visually but in terms of when to use each."

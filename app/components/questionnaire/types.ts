@@ -36,6 +36,8 @@ export interface FormData {
   browserTargets: string;
   // Step 7
   freeForm: string;
+  // Figma import
+  figmaComponents: string;
 }
 
 export const initialFormData: FormData = {
@@ -69,4 +71,5 @@ export const initialFormData: FormData = {
   deviceTarget: "",
   browserTargets: "",
   freeForm: "",
+  figmaComponents: "",
 };
