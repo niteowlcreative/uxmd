@@ -14,7 +14,7 @@ export function generateDesignMd(data: FormData): string {
   lines.push("# DESIGN.md");
   lines.push(`**Project:** ${data.projectName || "Untitled"}`);
   lines.push(`**Generated:** ${date}`);
-  lines.push("**Tool:** UXMD by Niteowl Creative — uxmd.io");
+  lines.push("**Tool:** UXMD — uxmd.io");
   lines.push("");
   lines.push(
     "> Paste this file into your Claude Code, Cursor, or Codex session"
